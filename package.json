@@ -1,0 +1,10 @@
+{
+  "name": "1_redux",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Johny Kim",
+  "license": "MIT",
+  "dependencies": {
+    "redux": "^4.0.5"
+  }
+}
