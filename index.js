@@ -1,6 +1,21 @@
-import { createStore } from 'redux';
+const { createStore } = require('redux');
 
-const reducer = () => {};
+const reducer = (prevState, action) => {
+    switch (action.type) {
+        case 'CHANGE_NAME':
+            return {
+                ...prevState,
+                name: action.data
+            };
+        case 'CHANGE_AGE':
+            return {
+                ...prevState,
+                age: action.data
+            };
+        default:
+            return { ...prevState };
+    }
+};
 
 const initState = {
     name: 'Johny Kim',
@@ -15,7 +30,14 @@ console.log('1st', store.getState());
 // Actions
 const changeName = data => {
     return {
-        type: 'CHANGE_NAME', // Type은 Action의 이름이다.
+        type: 'CHANGE_NAME',
+        data
+    };
+};
+
+const changeAge = data => {
+    return {
+        type: 'CHANGE_AGE',
         data
     };
 };
