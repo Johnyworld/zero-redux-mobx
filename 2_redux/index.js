@@ -1,4 +1,4 @@
-const { createStore } = require('redux');
+const { createStore, applyMiddleware } = require('redux');
 const reducer = require('./reducers');
 const { logIn, logOut } = require('./actions/user');
 const { addPost } = require('./actions/post');
@@ -11,7 +11,21 @@ const initState = {
     posts: []
 };
 
-const store = createStore(reducer, initState);
+const firstMiddleware = store => next => action => {
+    console.log('Logging', action);
+    next(action);
+};
+
+const thunkMiddleware = store => next => action => {
+    if (typeof action === 'function') {
+        return action(store.dispatch, store.getState);
+    }
+    return next(action);
+};
+
+const enhancer = applyMiddleware(firstMiddleware, thunkMiddleware);
+
+const store = createStore(reducer, initState, enhancer);
 
 console.log('1st', store.getState());
 

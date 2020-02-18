@@ -50,13 +50,13 @@ store.subscribe(() => {
 
 Dispatch 는 **실행**을 의미한다. 위 모든 과정은 미리 셋팅을 해야 하고, Dispatch는 실제로 만들어놓은 Action을 실행할 때 사용한다.
 
-## Redux foldering
+### Redux foldering
 
-### Action 분리
+#### Action 분리
 
 액션은 데이터 기준으로 분류하여 actions 폴더에 모은다.
 
-### Reducer 분리
+#### Reducer 분리
 
 리듀서는 나눠진 리듀서들을 combineReducer 함수를 이용하여 합칠 수 있다.
 
@@ -70,5 +70,53 @@ module.exports = combineReducers({
     user: userReducer,
     post: postReducer
 })
+```
 
+### Middleware
+
+추가 예시
+
+```jsx
+const { applyMiddleware } = require('redux');
+
+const firstMiddleware = store => next => action => {
+    next(action);
+};
+
+const secondMiddleware = store => next => action => {
+    next(action);
+};
+
+const enhancer = applyMiddleware(firstMiddleware, secondMiddleware);
+```
+
+#### Thunk
+
+Action 을 함수로 리턴되게 만들면 Thunk 미들웨어에서 비동기로 실행하도록 만들어준다.
+
+-   Action 을 선언할 때 객체를 리턴하면 동기 / 함수를 리턴하면 비동기가 된다.
+
+```jsx
+// Thunk
+const thunkMiddleware = store => next => action => {
+    if (typeof action === 'function') {
+        return action(store.dispatch, store.getState);
+    }
+    return next(action);
+};
+
+// Async Action Creator 선언
+const logIn = data => {
+    return (dispatch, getState) => {
+        dispatch(logInRequest());
+        fetch(...)
+            .then(res=> res.json())
+            .then(json=> {
+                dispatch(logInSuccess(json.data));
+            })
+            .catch(err=> {
+                dispatch(loginFailed());
+            })
+    };
+};
 ```
