@@ -1,12 +1,18 @@
+const { produce } = require('immer');
+
 const initState = [];
 
 const postReducer = (prevState = initState, action) => {
-    switch (action.type) {
-        case 'ADD_POST':
-            return [...prevState, action.data];
-        default:
-            return prevState;
-    }
+    return produce(prevState, draft => {
+        switch (action.type) {
+            case 'ADD_POST':
+                draft.push(action.data);
+                break;
+
+            default:
+                break;
+        }
+    });
 };
 
 module.exports = postReducer;
